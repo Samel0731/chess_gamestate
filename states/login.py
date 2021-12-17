@@ -1,13 +1,14 @@
 import pygame
 import re
 from states.my_state import State
+from states.tile import Level
 
 
 class LoginMenu(State):
     def __init__(self, game):
         State.__init__(self,game)
-        self.username = InputBox(self.game, self.game.GAME_W*.5, self.game.GAME_H*.3, 200, 25, 'username')
-        self.password = InputBox(self.game, self.game.GAME_W*.5, self.game.GAME_H*.5, 200, 25, 'password')
+        self.username = InputBox(self, self.game, self.game.GAME_W*.5, self.game.GAME_H*.3, 200, 25, 'username')
+        self.password = InputBox(self, self.game, self.game.GAME_W*.5, self.game.GAME_H*.5, 200, 25, 'password')
         self.username.active = True
         self.cursor_pos_x, self.cursor_pos_y  = self.username.rect.x-20, self.username.rect.y
         self.cursor_rect_x, self.cursor_rect_y = self.cursor_pos_x, self.cursor_pos_y
@@ -26,10 +27,12 @@ class LoginMenu(State):
         self.password.render(display)
     
     def update(self, delta_time, actions):
+        self.start_update(actions)
+        self.register_update(actions)
         self.update_cursor(actions)
         self.inputbox_active(actions)
-        self.username.update(actions)
-        self.password.update(actions)
+        self.user_txt = self.username.update(actions)
+        self.psd_txt = self.password.update(actions)
         self.game.reset_keys()
 
     
@@ -55,9 +58,22 @@ class LoginMenu(State):
         if actions['action2']:
             self.username.active ,self.password.active = False, False
 
+    def start_update(self, actions):
+        if actions['start'] and self.index==2:
+            self.game.client_socket.connect()
+            c2flag = self.game.client_socket.login(self.user_txt, self.psd_txt)
+            new_state = Level(self.game)
+            new_state.enter_state()
+
+    def register_update(self, actions):
+        if actions['start'] and self.index==3:
+            c2flag = self.game.client_socket.regist(self.user_txt, self.psd_txt)
+            
+
 class InputBox():
-    def __init__(self, game, x, y, w, h, text=''):
+    def __init__(self, loginmenu, game, x, y, w, h, text=''):
         pygame.init()
+        self.loginmenu = loginmenu
         self.game = game
         self.COLOR_INACTIVE = pygame.Color('lightskyblue3')
         self.COLOR_ACTIVE = pygame.Color('dodgerblue2')
@@ -69,25 +85,26 @@ class InputBox():
         self.txt_surface = self.FONT.render(text, True, self.color)
         self.active = False
 
-    def update(self, actions):
+    def update(self,actions):
         # Resize the box if the text is too long.
         # width = max(150, self.txt_surface.get_width()+10)
         # self.rect.w = width
         self.color = self.COLOR_ACTIVE if self.active else self.COLOR_INACTIVE
-        if actions['start']:
-            temp = self.text
-            print(self.text)
-            self.text = ''
-            # Re-render the text.
-            self.txt_surface = self.FONT.render(self.text, True, self.color)
-            return temp
-        if self.active:
-            if actions['backsapce']:
-                self.text = self.text[:-1]
-            elif re.match(r'\w',self.game.word) and len(self.text)<9:
-                self.text += self.game.word
-            # Re-render the text.
-            self.txt_surface = self.FONT.render(self.text, True, self.color)
+        if self.loginmenu.index==0 or self.loginmenu.index==1:
+            if actions['start']:
+                temp = self.text
+                print(self.text)
+                self.text = ''
+                # Re-render the text.
+                self.txt_surface = self.FONT.render(self.text, True, self.color)
+                return temp
+            if self.active:
+                if actions['backspace']:
+                    self.text = self.text[:-1]
+                elif re.match(r'\w',self.game.word) and len(self.text)<9:
+                    self.text += self.game.word
+                # Re-render the text.
+                self.txt_surface = self.FONT.render(self.text, True, self.color)
 
     def render(self, display):
         # Blit the text.

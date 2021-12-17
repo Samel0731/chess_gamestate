@@ -1,5 +1,5 @@
 import pygame, os
-from spritesheet import Spritesheet
+from states.spritesheet import Spritesheet
 class Player(pygame.sprite.Sprite):
     def __init__(self, game):
         pygame.sprite.Sprite.__init__(self)
@@ -19,7 +19,7 @@ class Player(pygame.sprite.Sprite):
         
     
     def import_character_asset(self):
-        asset_dir = os.path.join(os.getcwd(), "asset")
+        asset_dir = os.path.join(os.getcwd(), "assets")
         sheetimg_dir = os.path.join(asset_dir, "four_walk.png")
         walk = Spritesheet(sheetimg_dir)
         self.walk_animations = walk.character_parse_sprite(32,32)

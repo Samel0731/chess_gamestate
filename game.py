@@ -1,23 +1,25 @@
 import os, time, pygame
 from states.login import LoginMenu
+from states.Client_Program import ClientSocket
 # 12345
 
 
 class Game():
     def __init__(self):
         pygame.init()
-        self.GAME_W, self.GAME_H = 480, 270
+        self.GAME_W, self.GAME_H = 890, 600
         self.SCREEN_WIDTH, self.SCREEN_HEIGHT = 890, 600
         self.game_canvas = pygame.Surface((self.GAME_W, self.GAME_H))
         self.screen = pygame.display.set_mode((self.SCREEN_WIDTH, self.SCREEN_HEIGHT))
         self.running, self.playing = True, True
         self.actions = {"left":False, "right":False, "up":False, "down":False,
-                        "action1":False, "action2":False, "backsapce":False, "start":False}
+                        "action1":False, "action2":False, "backspace":False, "start":False, "space":False}
         self.word = ''
         self.dt, self.prev_time = 0, 0
         self.state_stack = []
         self.load_assets()
         self.load_states()
+        self.client_socket = ClientSocket()
 
     
     def game_loop(self):
@@ -55,6 +57,8 @@ class Game():
                     self.actions['backsapce'] = True
                 if event.key == pygame.K_RETURN:
                     self.actions['start'] = True
+                if event.key == pygame.K_SPACE:
+                    self.actions['space'] = True
                 
             
             if event.type == pygame.KEYUP:
@@ -72,7 +76,9 @@ class Game():
                 if event.key == pygame.K_o:
                     self.actions['action2'] = False
                 if event.key == pygame.K_RETURN:
-                    self.actions['start'] = False  
+                    self.actions['start'] = False
+                if event.key == pygame.K_SPACE:
+                    self.actions['space'] = False    
     
     def update(self):
         self.state_stack[-1].update(self.dt,self.actions)

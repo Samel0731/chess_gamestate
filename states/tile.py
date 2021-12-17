@@ -1,9 +1,9 @@
 import pygame, os, csv
-from my_state import State
-from spritesheet import Spritesheet
-from player import Player
+from states.my_state import State
+from states.spritesheet import Spritesheet
+from states.player import Player
 
-asset_dir = os.path.join(os.getcwd(), "asset")
+asset_dir = os.path.join(os.getcwd(), "assets")
 class Tile(pygame.sprite.Sprite):
     def __init__(self,x,y,surface,size=32,csv_id=-1):
         pygame.sprite.Sprite.__init__(self)
@@ -24,7 +24,7 @@ class Tile(pygame.sprite.Sprite):
 class Level(State):
     def __init__(self,game):
         State.__init__(self,game)
-        self.background = pygame.image.load(os.path.join(os.getcwd(), "asset","lobby.png"))
+        self.background = pygame.image.load(os.path.join(os.getcwd(), "assets","lobby.png"))
         self.background.set_colorkey((255,255,255))
         self.player = pygame.sprite.GroupSingle()
         
@@ -33,7 +33,7 @@ class Level(State):
         self.player.add(player_sprite)
         # self.background = pygame.transform.scale(self.background, (int(width * (480/width)), int(height * (270/height))))
         self.level = list()
-        with open(os.path.join(os.getcwd(), "asset","lobby_level.csv")) as data:
+        with open(os.path.join(os.getcwd(), "assets","lobby_level.csv")) as data:
             data = csv.reader(data, delimiter=',')
             for row in data:
                 self.level.append(list(row))
@@ -42,7 +42,7 @@ class Level(State):
         self.setup_level(self.level)
 
     def setup_level(self,layout):
-        asset_dir = os.path.join(os.getcwd(), "asset")
+        asset_dir = os.path.join(os.getcwd(), "assets")
         sheet_dir = os.path.join(asset_dir, "sheet_32.png")
         sheet_object = Spritesheet(sheet_dir)
         self.mapsheet = sheet_object.map_parse_sprite(32,32)

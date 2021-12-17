@@ -8,7 +8,8 @@ import xmlrpc.client
 import time
 
 # ip
-ip = '10.22.70.109'
+# ip = '10.22.70.109'
+ip = '192.168.43.194'
 PORT = 8888
 
 class ClientSocket:
@@ -16,7 +17,7 @@ class ClientSocket:
         self.server = xmlrpc.client.ServerProxy('http://' + ip + ':' + str(PORT))
         # regist flag
         self.logflag = 0
-        self.c1flag = None
+        self.c1flag = 0
 
     def regist(self, new_user, new_password):
         print('Add new user')
@@ -58,6 +59,9 @@ class ClientSocket:
     
     def clear_dataid(self):
         self.server.clear_dataid()
+
+    def connect(self):
+        pass
 
 if __name__ == '__main__':
     print("Hello")

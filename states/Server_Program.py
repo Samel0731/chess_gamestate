@@ -75,13 +75,16 @@ class client_methods:
         if(EnableCS):
             self.lock = threading.Lock()
     def register(self,name,password):
+        print("11111111111111111111111111111")
         i = 0
         flag = 0
-        for i in namelist:
-            if i[1]==name:
-                flag=1    
+        if len(namelist)>0:
+            for i in namelist:
+                if i[1]==name:
+                    flag=1    
         if flag==0:
             namelist.append(["name",name," password",password])
+            print(namelist)
             return 1
         else:
             return 0
@@ -124,8 +127,8 @@ class client_methods:
 def main():
     obj = client_methods()
     # server = SimpleXMLRPCServer(('localhost', PORT))
-    server = SimpleXMLRPCServer(('10.22.70.109', PORT))
-    # server = ThreadXMLRPCServer(('10.21.15.175', PORT))    
+    #server = SimpleXMLRPCServer(('10.22.70.109', PORT))
+    server = ThreadXMLRPCServer(('192.168.43.194', PORT))  
     server.register_instance(obj)
     print('Listen on port  %d' % PORT)
     try:
