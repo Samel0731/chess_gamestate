@@ -1,0 +1,14 @@
+{ "columns":17,
+ "image":"sheet_32.png",
+ "imageheight":256,
+ "imagewidth":544,
+ "margin":0,
+ "name":"sheet_32",
+ "spacing":0,
+ "tilecount":136,
+ "tiledversion":"1.7.2",
+ "tileheight":32,
+ "tilewidth":32,
+ "type":"tileset",
+ "version":"1.6"
+}
