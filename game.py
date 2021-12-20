@@ -1,9 +1,12 @@
 import os, time, pygame
+import xmlrpc.client
+import time
 from states.login import LoginMenu
 from states.Client_Program import ClientSocket
-# 12345
 
 
+ip = '192.168.43.238'
+PORT = 8888
 class Game():
     def __init__(self):
         pygame.init()
@@ -19,7 +22,7 @@ class Game():
         self.state_stack = []
         self.load_assets()
         self.load_states()
-        self.client_socket = ClientSocket()
+        self.client_socket = xmlrpc.client.ServerProxy('http://' + ip + ':' + str(PORT))
 
     
     def game_loop(self):
@@ -41,20 +44,20 @@ class Game():
                 if event.key == pygame.K_ESCAPE:
                     self.playing = False
                     self.running = False
-                if event.key == pygame.K_a:
+                if event.key == pygame.K_LEFT:
                     self.actions['left'] = True
-                if event.key == pygame.K_d:
+                if event.key == pygame.K_RIGHT:
                     self.actions['right'] = True
-                if event.key == pygame.K_w:
+                if event.key == pygame.K_UP:
                     self.actions['up'] = True
-                if event.key == pygame.K_s:
+                if event.key == pygame.K_DOWN:
                     self.actions['down'] = True
                 if event.key == pygame.K_p:
                     self.actions['action1'] = True
                 if event.key == pygame.K_o:
                     self.actions['action2'] = True
                 if event.key == pygame.K_BACKSPACE:
-                    self.actions['backsapce'] = True
+                    self.actions['backspace'] = True
                 if event.key == pygame.K_RETURN:
                     self.actions['start'] = True
                 if event.key == pygame.K_SPACE:
@@ -63,18 +66,20 @@ class Game():
             
             if event.type == pygame.KEYUP:
                 self.word = ''
-                if event.key == pygame.K_a:
+                if event.key == pygame.K_LEFT:
                     self.actions['left'] = False
-                if event.key == pygame.K_d:
+                if event.key == pygame.K_RIGHT:
                     self.actions['right'] = False
-                if event.key == pygame.K_w:
+                if event.key == pygame.K_UP:
                     self.actions['up'] = False
-                if event.key == pygame.K_s:
+                if event.key == pygame.K_DOWN:
                     self.actions['down'] = False
                 if event.key == pygame.K_p:
                     self.actions['action1'] = False
                 if event.key == pygame.K_o:
                     self.actions['action2'] = False
+                if event.key == pygame.K_BACKSPACE:
+                    self.actions['backspace'] = False
                 if event.key == pygame.K_RETURN:
                     self.actions['start'] = False
                 if event.key == pygame.K_SPACE:

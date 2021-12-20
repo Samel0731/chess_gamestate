@@ -1,6 +1,7 @@
 import pygame, os, csv
 from states.my_state import State
 from states.spritesheet import Spritesheet
+from states.chessboard import ChessGame
 from states.player import Player
 
 asset_dir = os.path.join(os.getcwd(), "assets")
@@ -24,6 +25,7 @@ class Tile(pygame.sprite.Sprite):
 class Level(State):
     def __init__(self,game):
         State.__init__(self,game)
+        self.game = game
         self.background = pygame.image.load(os.path.join(os.getcwd(), "assets","lobby.png"))
         self.background.set_colorkey((255,255,255))
         self.player = pygame.sprite.GroupSingle()
@@ -60,6 +62,9 @@ class Level(State):
     
     def update(self, delta_time, actions):
         self.player.update(delta_time, actions, self.map)
+        if actions['action1']:
+            new_state = ChessGame(self.game)
+            new_state.enter_state()
 
     def render(self, display):
         display.fill((255,255,255))

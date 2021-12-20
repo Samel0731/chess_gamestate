@@ -20,6 +20,7 @@ class ClientSocket:
         self.c1flag = 0
 
     def regist(self, new_user, new_password):
+        self.server = xmlrpc.client.ServerProxy('http://' + ip + ':' + str(PORT))
         print('Add new user')
         # new_user = input('User name: ')
         # new_password = input('Password:')
@@ -30,6 +31,7 @@ class ClientSocket:
             print("\nRegist failed!Duplicate username\n")
     
     def login(self, user_name, user_password):
+        self.server = xmlrpc.client.ServerProxy('http://' + ip + ':' + str(PORT))
         if self.c1flag == 1:
             print('log in')
             # user_name = input('Your name: ')
@@ -48,20 +50,23 @@ class ClientSocket:
             print("Please register first!")
     
     def send2Server(self, buf):
+        self.server = xmlrpc.client.ServerProxy('http://' + ip + ':' + str(PORT))
         id = buf
         self.server.server_receive_data(id)
     
     def recvfromServer(self):
+        self.server = xmlrpc.client.ServerProxy('http://' + ip + ':' + str(PORT))
         return self.server.server_send_data()
 
     def get_game_room(self):
+        self.server = xmlrpc.client.ServerProxy('http://' + ip + ':' + str(PORT))
         return self.server.get_game_room()
     
     def clear_dataid(self):
+        self.server = xmlrpc.client.ServerProxy('http://' + ip + ':' + str(PORT))
         self.server.clear_dataid()
 
-    def connect(self):
-        pass
+
 
 if __name__ == '__main__':
     print("Hello")

@@ -1,4 +1,4 @@
-from TextBar import InputBox
+# from TextBar import InputBox
 import os
 import pygame
 pygame.init()

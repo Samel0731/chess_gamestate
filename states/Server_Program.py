@@ -128,7 +128,7 @@ def main():
     obj = client_methods()
     # server = SimpleXMLRPCServer(('localhost', PORT))
     #server = SimpleXMLRPCServer(('10.22.70.109', PORT))
-    server = ThreadXMLRPCServer(('192.168.43.194', PORT))  
+    server = ThreadXMLRPCServer(('192.168.43.238', PORT))  
     server.register_instance(obj)
     print('Listen on port  %d' % PORT)
     try:

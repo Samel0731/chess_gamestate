@@ -53,15 +53,14 @@ class LoginMenu(State):
 
 
     def inputbox_active(self, actions):
-        if actions['action1']:
-            self.username.active ,self.password.active = (False, True) if self.index else (True, False)
-        if actions['action2']:
-            self.username.active ,self.password.active = False, False
+        if self.index == 0:
+            self.username.active ,self.password.active =  True, False
+        if self.index == 1:
+            self.username.active ,self.password.active =  False, True
 
     def start_update(self, actions):
         if actions['start'] and self.index==2:
-            self.game.client_socket.connect()
-            c2flag = self.game.client_socket.login(self.user_txt, self.psd_txt)
+            # c2flag = self.game.client_socket.login(self.user_txt, self.psd_txt)
             new_state = Level(self.game)
             new_state.enter_state()
 
